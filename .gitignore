@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+
+# dane pobiera się skryptem: python -m src.download_data
+data/
+
+# wagi modeli odtwarza się treningiem (ok. 20 s)
+models/*.pt
