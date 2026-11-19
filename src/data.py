@@ -1,5 +1,3 @@
-
-machta rap fan
 from pathlib import Path
 
 import numpy as np
