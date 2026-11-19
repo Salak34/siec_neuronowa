@@ -1,8 +1,3 @@
-"""Pobiera zbiór IMDB Dataset of 50K Movie Reviews z Kaggle do katalogu data/.
-
-Użycie (z głównego katalogu projektu):
-    python -m src.download_data
-"""
 import shutil
 from pathlib import Path
 
@@ -10,7 +5,7 @@ import kagglehub
 
 KAGGLE_DATASET = "lakshmi25npathi/imdb-dataset-of-50k-movie-reviews"
 FILE_NAME = "IMDB Dataset.csv"
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+DATA_DIR = Path(_file_).resolve().parent.parent / "data"
 
 
 def download() -> Path:
@@ -26,5 +21,5 @@ def download() -> Path:
     return target
 
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     download()

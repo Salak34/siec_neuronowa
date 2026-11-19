@@ -1,8 +1,3 @@
-"""Klasyfikacja własnych, wpisanych ręcznie wiadomości.
-
-Użycie (z głównego katalogu projektu, po treningu):
-    python -m src.predict "This movie was absolutely wonderful!"
-"""
 import sys
 
 import torch
@@ -14,7 +9,6 @@ from .train import MODELS_DIR, get_device
 
 @torch.no_grad()
 def predict_texts(model, vocab: Vocab, texts: list[str], max_len: int, device=None) -> list[float]:
-    """Zwraca prawdopodobieństwo klasy pozytywnej dla każdego tekstu."""
     device = device or next(model.parameters()).device
     tokens = [tokenize(clean_text(t)) for t in texts]
     x = torch.as_tensor(encode_texts(tokens, vocab, max_len)).to(device)
@@ -40,7 +34,7 @@ def describe(prob: float) -> str:
     return f"{label} ({confidence:.0%})"
 
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     texts = sys.argv[1:] or [input("Wpisz wiadomość: ")]
     model, vocab, max_len = load_model()
     for text, prob in zip(texts, predict_texts(model, vocab, texts, max_len)):

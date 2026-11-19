@@ -1,4 +1,5 @@
-"""Wczytywanie zbioru IMDB, podział na części i obiekty Dataset dla PyTorch."""
+
+machta rap fan
 from pathlib import Path
 
 import numpy as np
@@ -9,25 +10,22 @@ from torch.utils.data import DataLoader, Dataset
 
 from .preprocessing import Vocab, clean_text, encode_texts, tokenize
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(_file_).resolve().parent.parent
 DEFAULT_CSV = ROOT / "data" / "IMDB Dataset.csv"
 LABELS = {"negative": 0, "positive": 1}
 
 
 def load_imdb(path: str | Path = DEFAULT_CSV) -> pd.DataFrame:
-    """Wczytuje CSV i dodaje kolumnę label: 0 = negatywna, 1 = pozytywna."""
     df = pd.read_csv(path)
     df["label"] = df["sentiment"].map(LABELS).astype(int)
     return df
 
 
 def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
-    """Usuwa powtórzone recenzje, żeby ten sam tekst nie trafił do kilku zbiorów."""
     return df.drop_duplicates(subset="review").reset_index(drop=True)
 
 
 def split_data(df: pd.DataFrame, val_size: float = 0.1, test_size: float = 0.1, seed: int = 42):
-    """Dzieli dane na uczące / walidacyjne / testowe z zachowaniem proporcji klas."""
     train_val, test = train_test_split(
         df, test_size=test_size, stratify=df["label"], random_state=seed
     )
@@ -41,10 +39,8 @@ def split_data(df: pd.DataFrame, val_size: float = 0.1, test_size: float = 0.1, 
 
 
 class ReviewDataset(Dataset):
-    """Zakodowane recenzje (macierz indeksów) + etykiety."""
-
     def __init__(self, ids: np.ndarray, labels: np.ndarray):
-        self.ids = torch.tensor(ids, dtype=torch.long)  # torch.tensor kopiuje dane
+        self.ids = torch.tensor(ids, dtype=torch.long)
         self.labels = torch.tensor(labels, dtype=torch.float32)
 
     def __len__(self) -> int:
@@ -65,11 +61,6 @@ def prepare_data(
     min_freq: int = 2,
     seed: int = 42,
 ) -> dict:
-    """Cały pipeline przygotowania danych w jednej funkcji.
-
-    Zwraca słownik z podzielonymi DataFrame'ami, słownikiem (Vocab)
-    oraz zakodowanymi macierzami X_* i etykietami y_*.
-    """
     df = remove_duplicates(load_imdb(csv_path))
     df["clean"] = df["review"].map(clean_text)
     df["tokens"] = df["clean"].map(tokenize)

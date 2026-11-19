@@ -1,8 +1,3 @@
-"""Pętla treningowa, ewaluacja i uruchomienie treningu modelu bazowego z terminala.
-
-Użycie (z głównego katalogu projektu):
-    python -m src.train --epochs 10
-"""
 import argparse
 import copy
 import json
@@ -22,7 +17,7 @@ MODELS_DIR = ROOT / "models"
 
 def get_device() -> torch.device:
     if torch.backends.mps.is_available():
-        return torch.device("mps")  # GPU w Macach z Apple Silicon
+        return torch.device("mps")
     if torch.cuda.is_available():
         return torch.device("cuda")
     return torch.device("cpu")
@@ -66,7 +61,6 @@ def evaluate(model, loader, loss_fn, device):
 
 @torch.no_grad()
 def predict_proba(model, loader, device) -> np.ndarray:
-    """Prawdopodobieństwo klasy pozytywnej dla każdej recenzji."""
     model.eval()
     probs = [torch.sigmoid(model(x.to(device))).cpu() for x, _ in loader]
     return torch.cat(probs).numpy()
@@ -74,10 +68,6 @@ def predict_proba(model, loader, device) -> np.ndarray:
 
 def fit(model, train_loader, val_loader, epochs: int = 10, lr: float = 1e-3,
         device=None, patience: int | None = 3, verbose: bool = True):
-    """Trenuje model i na końcu przywraca wagi z epoki o najlepszej accuracy walidacyjnej.
-
-    patience — wczesne zatrzymanie, gdy accuracy walidacyjna nie rośnie przez tyle epok.
-    """
     device = device or get_device()
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -149,5 +139,5 @@ def main():
     print(f"Najlepsza accuracy walidacyjna: {best:.4f}. Zapisano model: {path}")
 
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     main()
